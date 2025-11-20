@@ -1,0 +1,116 @@
+name: Playwright Cucumber Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Run Playwright Cucumber Tests
+      run: npx cucumber-js
+      env:
+        BASE_URL: ${{ vars.BASE_URL || 'https://sample-project-dusky.vercel.app' }}
+        BROWSER: ${{ matrix.browser }}
+        HEADLESS: true
+        TIMEOUT: ${{ vars.TIMEOUT || '60000' }}
+        VIEWPORT_WIDTH: ${{ vars.VIEWPORT_WIDTH || '1280' }}
+        VIEWPORT_HEIGHT: ${{ vars.VIEWPORT_HEIGHT || '720' }}
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.browser }}
+        path: reports/
+        retention-days: 30
+    
+    - name: Upload screenshots on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots-${{ matrix.browser }}
+        path: reports/screenshots/
+        retention-days: 30
+    
+    - name: Upload videos on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: videos-${{ matrix.browser }}
+        path: reports/videos/
+        retention-days: 30
+
+  report:
+    name: Generate Test Report
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: reports-all/
+    
+    - name: Generate HTML Report
+      run: |
+        mkdir -p reports
+        cp -r reports-all/test-results-chromium/* reports/ 2>/dev/null || true
+        npm run report || echo "Report generation skipped"
+      continue-on-error: true
+    
+    - name: Upload HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-report
+        path: reports/html-report/
+        retention-days: 30
+    
+    - name: Publish Test Results
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Test Results
+        path: reports/cucumber-report.json
+        reporter: cucumber-json
+      continue-on-error: true
+

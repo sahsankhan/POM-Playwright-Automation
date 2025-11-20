@@ -1,3 +1,5 @@
+@Section1
+
 Feature: Sample project automation Section 1 Scenarios
 
 Scenario: Section 1 passes validation

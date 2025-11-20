@@ -11,6 +11,12 @@ When('the user clicks on Choose Film dropdown in Section 2', async function () {
   await this.page.waitForTimeout(500);
 });
 
+// Alias for the above step (without "the")
+When('user clicks on Choose Film dropdown in Section 2', async function () {
+  await this.section2Page.clickFilmDropdown();
+  await this.page.waitForTimeout(500);
+});
+
 When('the user enters {string} in the Section 2 film field', async function (searchText) {
   await this.section2Page.typeFilmSearch(searchText);
 });

@@ -147,3 +147,24 @@ When the user clicks "Validate" button for section 1
 Then the following error should appear:
 | Error Message |
 | Text field is required |
+
+Scenario: Section 1 Validate with using characters in text section field
+Given the user selects is on sample project page
+When user clicks on Choose Film dropdown in Section 1
+Then following options should be visible:
+| Option |
+| The Shawshank Redemption |
+| The Godfather |
+| The Dark Knight |
+| 12 Angry Men |
+| Schindler's List |
+When the user selects "The Dark" from the dropdown
+Then the user should see "The Dark Knight" selected in the field
+When the user clicks "Text for selection" field
+And the user enters "Test Section ++"
+Then user should see checkbox text as "Unchecked"
+When the user checks the checkbox
+Then the checkbox should be checked
+And checkbox text should change to "Checked"
+When the user clicks "Validate" button for section 1
+Then error msg should appear "Text contains invalid characters (only letters, numbers and spaces allowed)"

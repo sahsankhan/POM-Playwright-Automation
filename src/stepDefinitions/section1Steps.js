@@ -286,3 +286,18 @@ Then('the use should see following fields empty:', async function (dataTable) {
   }
 });
 
+// Then step - Verify specific error message appears (works for both Section 1 and Section 2)
+Then('error msg should appear {string}', async function (expectedErrorMessage) {
+  // Try section1Page first, then section2Page if section1 is not available
+  const pageObject = this.section1Page || this.section2Page;
+  
+  // Check if error message is visible using page object method
+  const isVisible = await pageObject.isSpecificErrorVisible(expectedErrorMessage);
+  expect(isVisible).toBe(true);
+  
+  // Get and verify the exact text using page object method
+  const actualText = await pageObject.getSpecificErrorText(expectedErrorMessage);
+  expect(actualText).not.toBeNull();
+  expect(actualText.trim()).toBe(expectedErrorMessage);
+});
+

@@ -289,6 +289,47 @@ class Section2Page {
       return [];
     }
   }
+
+  /**
+   * Get specific error message locator by text
+   * @param {string} errorText - The exact error message text
+   * @returns {string} XPath locator for the error message
+   */
+  getSpecificErrorLocator(errorText) {
+    return `//div[text()='${errorText}']`;
+  }
+
+  /**
+   * Check if specific error message is visible
+   * @param {string} errorText - The exact error message text
+   * @returns {Promise<boolean>} True if error message is visible
+   */
+  async isSpecificErrorVisible(errorText) {
+    try {
+      const locator = this.getSpecificErrorLocator(errorText);
+      const errorElement = this.page.locator(locator);
+      await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+      return await errorElement.isVisible();
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * Get the text of a specific error message
+   * @param {string} errorText - The exact error message text
+   * @returns {Promise<string|null>} The error message text or null if not found
+   */
+  async getSpecificErrorText(errorText) {
+    try {
+      const locator = this.getSpecificErrorLocator(errorText);
+      const errorElement = this.page.locator(locator);
+      await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+      return await errorElement.textContent();
+    } catch (error) {
+      return null;
+    }
+  }
 }
 
 module.exports = Section2Page;

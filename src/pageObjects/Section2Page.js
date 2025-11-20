@@ -34,7 +34,9 @@ class Section2Page {
    * Click on film dropdown
    */
   async clickFilmDropdown() {
+    await this.page.waitForSelector(this.filmDropdownInput, { state: 'visible', timeout: 5000 });
     await this.page.click(this.filmDropdownInput);
+    await this.page.waitForSelector(this.filmOptions, { state: 'visible', timeout: 5000 });
   }
 
   /**
@@ -42,8 +44,13 @@ class Section2Page {
    * @param {string} query - Search query
    */
   async typeFilmSearch(query) {
+    await this.page.waitForSelector(this.filmDropdownInput, { state: 'visible', timeout: 5000 });
     await this.page.fill(this.filmDropdownInput, query);
-    // Playwright auto-waits for options to load - no explicit wait needed
+    // Wait for either options or "No options" to appear
+    await Promise.race([
+      this.page.waitForSelector(this.filmOptions, { timeout: 5000 }),
+      this.page.waitForSelector(this.noOptionsItem, { timeout: 5000 })
+    ]);
   }
 
   /**
@@ -75,8 +82,10 @@ class Section2Page {
    */
   async selectFilm(filmPartial) {
     const optionSelector = `//li[@role='option' and contains(normalize-space(), "${filmPartial}")]`;
+    await this.page.waitForSelector(optionSelector, { state: 'visible', timeout: 5000 });
     await this.page.click(optionSelector);
-    // Playwright auto-waits for the element to be actionable before clicking
+    // Wait for the value to be set
+    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -92,6 +101,7 @@ class Section2Page {
    * @param {string} value - Text to enter
    */
   async enterText(value) {
+    await this.page.waitForSelector(this.textField, { state: 'visible', timeout: 5000 });
     await this.page.fill(this.textField, value);
   }
 
@@ -116,7 +126,10 @@ class Section2Page {
    * Check the checkbox
    */
   async checkCheckbox() {
+    await this.page.waitForSelector(this.checkbox, { state: 'visible', timeout: 5000 });
     await this.page.check(this.checkbox);
+    // Wait for checkbox state to update
+    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -144,24 +157,33 @@ class Section2Page {
    * Click validate button
    */
   async clickValidate() {
+    await this.page.waitForSelector(this.validateBtn, { state: 'visible', timeout: 5000 });
     await this.page.click(this.validateBtn);
-    // Playwright auto-waits for validation to complete
+    // Wait for validation result (banner or error)
+    await Promise.race([
+      this.page.waitForSelector(this.banner, { timeout: 5000 }),
+      this.page.waitForSelector(this.errorAlertMessage, { timeout: 5000 })
+    ]);
   }
 
   /**
    * Click reset button
    */
   async clickReset() {
+    await this.page.waitForSelector(this.resetBtn, { state: 'visible', timeout: 5000 });
     await this.page.click(this.resetBtn);
-    // Playwright auto-waits for reset action to complete
+    // Wait for fields to be cleared
+    await this.page.waitForTimeout(500);
   }
 
   /**
    * Click clear film button
    */
   async clickClearFilm() {
+    await this.page.waitForSelector(this.clearFilmButton, { state: 'visible', timeout: 5000 });
     await this.page.click(this.clearFilmButton);
-    // Playwright auto-waits for clear action to complete
+    // Wait for field to be cleared
+    await this.page.waitForTimeout(300);
   }
 
   /**

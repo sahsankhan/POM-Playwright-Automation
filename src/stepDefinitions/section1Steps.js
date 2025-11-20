@@ -21,12 +21,12 @@ Given('the user is on the sample project page', async function () {
 // When steps - Film dropdown interactions
 When('the user clicks on Choose Film dropdown in Section 1', async function () {
   await this.section1Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for dropdown to open
 });
 
 When('user clicks on Choose Film dropdown in Section 1', async function () {
   await this.section1Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for dropdown to open
 });
 
 When('the user enters {string} in the Choose Film field', async function (searchText) {
@@ -39,13 +39,13 @@ When('the user selects {string} from the dropdown', async function (filmName) {
 
 When('the user selects {string} from the film dropdown', async function (filmName) {
   await this.section1Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for options to load
   await this.section1Page.selectFilm(filmName);
 });
 
 When('the user selects {string}', async function (filmName) {
   await this.section1Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for options to load
   await this.section1Page.selectFilm(filmName);
 });
 
@@ -67,8 +67,7 @@ When('the user enters {string}', async function (text) {
 });
 
 When('the user leaves the text field empty', async function () {
-  // Do nothing - field is already empty
-  await this.page.waitForTimeout(100);
+  // Do nothing - field is already empty (no wait needed)
 });
 
 // When steps - Checkbox interactions
@@ -192,7 +191,7 @@ Then('user should see checkbox text as {string}', async function (expectedText) 
 });
 
 Then('checkbox text should change to {string}', async function (expectedText) {
-  await this.page.waitForTimeout(500); // Wait for state change
+  // Playwright auto-waits for the text content to be available
   const actualText = await this.section1Page.getCheckboxText();
   expect(actualText).toBe(expectedText);
 });

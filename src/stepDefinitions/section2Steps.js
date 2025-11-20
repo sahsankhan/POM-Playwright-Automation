@@ -8,13 +8,13 @@ const { expect } = require('@playwright/test');
 // When steps - Film dropdown interactions for Section 2
 When('the user clicks on Choose Film dropdown in Section 2', async function () {
   await this.section2Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for dropdown to open
 });
 
 // Alias for the above step (without "the")
 When('user clicks on Choose Film dropdown in Section 2', async function () {
   await this.section2Page.clickFilmDropdown();
-  await this.page.waitForTimeout(500);
+  // Playwright auto-waits for dropdown to open
 });
 
 When('the user enters {string} in the Section 2 film field', async function (searchText) {
@@ -26,7 +26,7 @@ When('the user selects {string} from the Section 2 dropdown', async function (fi
   const dropdownOpen = await this.page.isVisible("//li[@role='option']");
   if (!dropdownOpen) {
     await this.section2Page.clickFilmDropdown();
-    await this.page.waitForTimeout(500);
+    // Playwright auto-waits for options to load
   }
   await this.section2Page.selectFilm(filmName);
 });
@@ -41,8 +41,7 @@ When('the user enters {string} in Section 2 text field', async function (text) {
 });
 
 When('the user leaves the Section 2 text field empty', async function () {
-  // Do nothing - field is already empty
-  await this.page.waitForTimeout(100);
+  // Do nothing - field is already empty (no wait needed)
 });
 
 // When steps - Checkbox interactions for Section 2

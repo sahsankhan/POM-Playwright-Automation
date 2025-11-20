@@ -43,7 +43,7 @@ class Section2Page {
    */
   async typeFilmSearch(query) {
     await this.page.fill(this.filmDropdownInput, query);
-    await this.page.waitForTimeout(500);
+    // Playwright auto-waits for options to load - no explicit wait needed
   }
 
   /**
@@ -76,7 +76,7 @@ class Section2Page {
   async selectFilm(filmPartial) {
     const optionSelector = `//li[@role='option' and contains(normalize-space(), "${filmPartial}")]`;
     await this.page.click(optionSelector);
-    await this.page.waitForTimeout(500);
+    // Playwright auto-waits for the element to be actionable before clicking
   }
 
   /**
@@ -145,7 +145,7 @@ class Section2Page {
    */
   async clickValidate() {
     await this.page.click(this.validateBtn);
-    await this.page.waitForTimeout(1000);
+    // Playwright auto-waits for validation to complete
   }
 
   /**
@@ -153,7 +153,7 @@ class Section2Page {
    */
   async clickReset() {
     await this.page.click(this.resetBtn);
-    await this.page.waitForTimeout(1000);
+    // Playwright auto-waits for reset action to complete
   }
 
   /**
@@ -161,7 +161,7 @@ class Section2Page {
    */
   async clickClearFilm() {
     await this.page.click(this.clearFilmButton);
-    await this.page.waitForTimeout(500);
+    // Playwright auto-waits for clear action to complete
   }
 
   /**

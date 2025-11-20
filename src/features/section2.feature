@@ -139,23 +139,23 @@ Feature: Sample project automation Section 2 Scenarios
       | Error Message          |
       | Text field is required |
 
-Scenario: Section 2 Validate with using characters in text section field
-Given the user is on the sample project page
-When the user clicks on Choose Film dropdown in Section 2
-Then the following options should be visible in Section 2:
-| Option |
-| The Shawshank Redemption |
-| The Godfather |
-| The Dark Knight |
-| 12 Angry Men |
-| Schindler's List |
-When the user selects "The Dark" from the Section 2 dropdown
-Then the user should see "The Dark Knight" selected in Section 2 field
-When the user clicks "Text for selection" field in Section 2
-And the user enters "Test Section ++" in Section 2 text field
-Then the checkbox text in Section 2 should display "Unchecked"
-When the user checks the checkbox in Section 2
-Then the checkbox in Section 2 should be checked
-And the checkbox text in Section 2 should display "Checked"
-When the user clicks "Validate" button for section 2
-Then error msg should appear "Text contains invalid characters (only letters, numbers and spaces allowed)"
+  Scenario: Section 2 Validate with using characters in text section field
+    Given the user is on the sample project page
+    When the user clicks on Choose Film dropdown in Section 2
+    Then the following options should be visible in Section 2:
+      | Option                   |
+      | The Shawshank Redemption |
+      | The Godfather            |
+      | The Dark Knight          |
+      | 12 Angry Men             |
+      | Schindler's List         |
+    When the user selects "The Dark" from the Section 2 dropdown
+    Then the user should see "The Dark Knight" selected in Section 2 field
+    When the user clicks "Text for selection" field in Section 2
+    And the user enters "Test Section ++" in Section 2 text field
+    Then the checkbox text in Section 2 should display "Unchecked"
+    When the user checks the checkbox in Section 2
+    Then the checkbox in Section 2 should be checked
+    And the checkbox text in Section 2 should display "Checked"
+    When the user clicks "Validate" button for section 2
+    Then error msg should appear "Text contains invalid characters (only letters, numbers and spaces allowed)"

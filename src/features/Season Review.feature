@@ -2,6 +2,7 @@
 
 Feature: Sample project automation Season Review Scenarios
 
+  @smoke
   Scenario: Season Review passes validation
     Given the user is on the Mainteny — QA Demo page
     When the user clicks on Choose Film dropdown in Season Review
@@ -23,6 +24,7 @@ Feature: Sample project automation Season Review Scenarios
     When the user clicks "Submit" button for season review
     Then a banner should appear for Season Review: "Season Review is valid"
 
+  @smoke
   Scenario: Season Review resets validation
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Season Review
@@ -68,6 +70,7 @@ Feature: Sample project automation Season Review Scenarios
     When the user clicks "Clear" button for Season Review film field
     Then the Season Review film field should be empty
 
+  @negative
   Scenario: Verify No Options appear for invalid film name in Season Review
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Season Review
@@ -75,6 +78,7 @@ Feature: Sample project automation Season Review Scenarios
     Then the following options should be visible in Season Review:
       | No options |
 
+  @negative
   Scenario: Season Review Validate with all fields blank
     Given the user is on the sample project page
     When the user clicks "Submit" button for season review
@@ -87,6 +91,7 @@ Feature: Sample project automation Season Review Scenarios
     And the Season Review text field should remain empty
     And the checkbox text in Season Review should display "Terms and Conditions (not accepted)"
 
+  @negative
   Scenario: Season Review Validate with only film selected
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Season Review
@@ -106,6 +111,7 @@ Feature: Sample project automation Season Review Scenarios
       | You must check the box |
     And the checkbox text in Season Review should display "Terms and Conditions (not accepted)"
 
+  @negative
   Scenario: Season Review Validate with Film + text entered, checkbox unchecked
     Given the user is on the sample project page
     When the user selects "Wednesday" from the Season Review dropdown
@@ -117,6 +123,7 @@ Feature: Sample project automation Season Review Scenarios
       | Error Message          |
       | You must check the box |
 
+  @negative
   Scenario: Season Review Validate with Text + checkbox set, but no film selected
     Given the user is on the sample project page
     When the user enters "Test Season Review" in Season Review text field
@@ -127,6 +134,7 @@ Feature: Sample project automation Season Review Scenarios
       | Error Message          |
       | Please choose a Season |
 
+  @negative
   Scenario: Season Review Validate with Film selected + checkbox checked, but empty text field
     Given the user is on the sample project page
     When the user selects "The Witcher" from the Season Review dropdown
@@ -139,6 +147,7 @@ Feature: Sample project automation Season Review Scenarios
       | Error Message          |
       | Review field is required |
 
+  @negative
   Scenario: Season Review Validate with using characters in text field
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Season Review

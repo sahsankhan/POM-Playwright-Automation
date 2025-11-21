@@ -1,3 +1,5 @@
+const CommonLocators = require('./commonLocators');
+
 /**
  * Season Review Page Object
  * Contains all elements and methods for Season Review validation
@@ -7,15 +9,17 @@ class SeasonReviewPage {
     this.page = page;
     this.baseUrl = process.env.BASE_URL;
     
-    // Base locators - Updated with dynamic locators
-    this.pageTitle = 'h1.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom';
-    this.filmDropdownInput = 'div.MuiAutocomplete-inputRoot';
-    this.filmOptions = "li[role='option']";
-    this.noOptionsItem = "//div[contains(@class,'MuiAutocomplete-noOptions') and normalize-space()='No options']";
-    this.textField = 'Write your review';
+    // Common locators from shared file
+    this.pageTitle = CommonLocators.pageTitle;
+    this.filmDropdownInput = CommonLocators.filmDropdownInput;
+    this.filmOptions = CommonLocators.filmOptions;
+    this.noOptionsItem = CommonLocators.noOptionsItem;
+    this.textField = CommonLocators.textField;
+    this.checkboxTextLocator = CommonLocators.checkboxTextLocator;
+    this.clearFilmButton = CommonLocators.clearFilmButton;
+    
+    // Season Review specific locators
     this.checkbox = "[data-testid='s2-checkbox']";
-    this.checkboxTextLocator = 'span.MuiFormControlLabel-label';
-    this.clearFilmButton = 'Clear';
     this.validateBtn = "[data-testid='s2-validate-btn']";
     this.resetBtn = "[data-testid='s2-reset-btn']";
     this.banner = "[data-testid='s2-success-alert'] .MuiAlert-message";
@@ -28,7 +32,7 @@ class SeasonReviewPage {
    */
   async goto() {
     await this.page.goto(this.baseUrl);
-    await this.page.locator(this.pageTitle, { hasText: "Mainteny — QA Demo" }).waitFor({ timeout: 30000 });
+    await this.page.locator(this.pageTitle, { hasText: CommonLocators.pageTitleText }).waitFor({ timeout: 30000 });
   }
 
   /**

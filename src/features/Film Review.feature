@@ -2,6 +2,7 @@
 
 Feature: Sample project automation Film Review Scenarios
 
+  @smoke
   Scenario: Film Review passes validation
     Given the user selects is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
@@ -23,6 +24,7 @@ Feature: Sample project automation Film Review Scenarios
     When the user clicks "Submit" button for film review
     Then a banner should appear: "Film Review is valid"
 
+  @smoke
   Scenario: Film Review resets validation
     Given the user selects is on sample project page
     When user clicks on Choose Film dropdown in Film Review
@@ -67,6 +69,7 @@ Feature: Sample project automation Film Review Scenarios
     When the user clicks "Clear" button for choose a film field
     Then the user should see empty field
 
+  @negative
   Scenario: Verify No Options appear for invalid film name
     Given the user selects is on sample project page
     When user clicks on Choose Film dropdown in Film Review
@@ -74,6 +77,7 @@ Feature: Sample project automation Film Review Scenarios
     Then following options should be visible:
       | No options |
 
+  @negative
   Scenario: Film Review Validate with all fields blank
     Given the user is on the sample project page
     When the user clicks "Submit" button for film review
@@ -86,6 +90,7 @@ Feature: Sample project automation Film Review Scenarios
     And the text field should remain empty
     And checkbox text should remain "Terms and Conditions (not accepted)"
 
+  @negative
   Scenario: Film Review Validate with only film selected
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Film Review
@@ -105,6 +110,7 @@ Feature: Sample project automation Film Review Scenarios
       | You must check the box    |
     And checkbox text should remain "Terms and Conditions (not accepted)"
 
+  @negative
   Scenario: Film Review Validate with Film + text entered, checkbox unchecked
     Given the user is on the sample project page
     When the user selects "The Shawshank Redemption" from the film dropdown
@@ -116,6 +122,7 @@ Feature: Sample project automation Film Review Scenarios
       | Error Message          |
       | You must check the box |
 
+  @negative
   Scenario: Film Review Validate with Text + checkbox set, but no film selected
     Given the user is on the sample project page
     When the user enters "Test Film Review" in the text field
@@ -126,6 +133,7 @@ Feature: Sample project automation Film Review Scenarios
       | Error Message        |
       | Please choose a film |
 
+  @negative
   Scenario: Film Review Validate with Film selected + checkbox checked, but empty text field
     Given the user is on the sample project page
     When the user clicks on Choose Film dropdown in Film Review
@@ -139,6 +147,7 @@ Feature: Sample project automation Film Review Scenarios
       | Error Message            |
       | Review field is required |
 
+  @negative
   Scenario: Film Review Validate with using characters in text field
     Given the user selects is on sample project page
     When user clicks on Choose Film dropdown in Film Review

@@ -1,10 +1,10 @@
-@Section1
+@FilmReview
 
-Feature: Sample project automation Section 1 Scenarios
+Feature: Sample project automation Film Review Scenarios
 
-  Scenario: Section 1 passes validation
-    Given the user selects is on sample project page
-    When user clicks on Choose Film dropdown in Section 1
+  Scenario: Film Review passes validation
+    Given the user selects is on Mainteny — QA Demo page
+    When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
       | The Shawshank Redemption |
@@ -14,18 +14,18 @@ Feature: Sample project automation Section 1 Scenarios
       | Schindler's List         |
     When the user selects "The Dark" from the dropdown
     Then the user should see "The Dark Knight" selected in the field
-    When the user clicks "Text for selection" field
-    And the user enters "Test Section 1"
-    Then user should see checkbox text as "Unchecked"
+    When the user clicks "Write your review" field
+    And the user enters "Test Film Review"
+    Then user should see checkbox text as "Terms and Conditions (not accepted)"
     When the user checks the checkbox
     Then the checkbox should be checked
-    And checkbox text should change to "Checked"
-    When the user clicks "Validate" button for section 1
-    Then a banner should appear: "Section 1 is valid"
+    And checkbox text should change to "Terms and Conditions (accepted)"
+    When the user clicks "Submit" button for film review
+    Then a banner should appear: "Film Review is valid"
 
-  Scenario: Section 1 resets validation
+  Scenario: Film Review resets validation
     Given the user selects is on sample project page
-    When user clicks on Choose Film dropdown in Section 1
+    When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
       | The Shawshank Redemption |
@@ -35,26 +35,26 @@ Feature: Sample project automation Section 1 Scenarios
       | Schindler's List         |
     When the user enters "The Dark" in the Choose Film field
     Then following options should be visible:
-      | The Dark Knight |
+      | The Dark Knight          |
     When the user selects "The Dark" from the dropdown
     Then the user should see "The Dark Knight" selected in the field
-    When the user clicks "Text for Section 1" field
-    And the user enters "Test Section 1"
-    Then user should see checkbox text as "Unchecked"
+    When the user clicks "Text for Film Review" field
+    And the user enters "Test Film Review"
+    Then user should see checkbox text as "Terms and Conditions (not accepted)"
     When the user checks the checkbox
     Then the checkbox should be checked
-    And checkbox text should change to "Checked"
-    When the user clicks "Validate" button for section 1
-    Then a banner should appear: "Section 1 is valid"
-    When the user clicks "Reset" button for section 1
+    And checkbox text should change to "Terms and Conditions (accepted)"
+    When the user clicks "Submit" button for film review
+    Then a banner should appear: "Film Review is valid"
+    When the user clicks "Reset" button for film review
     Then the use should see following fields empty:
-      | Choose Film        |
-      | Text for Section 1 |
-      | Checkbox           |
+      | Choose Film          |
+      | Write your review    |
+      | Checkbox             |
 
   Scenario: Verify clear button for choose a film field clears the field
     Given the user selects is on sample project page
-    When user clicks on Choose Film dropdown in Section 1
+    When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
       | The Shawshank Redemption |
@@ -69,26 +69,26 @@ Feature: Sample project automation Section 1 Scenarios
 
   Scenario: Verify No Options appear for invalid film name
     Given the user selects is on sample project page
-    When user clicks on Choose Film dropdown in Section 1
+    When user clicks on Choose Film dropdown in Film Review
     When the user enters "TEST123" in the Choose Film field
     Then following options should be visible:
       | No options |
 
-  Scenario: Section 1 Validate with all fields blank
+  Scenario: Film Review Validate with all fields blank
     Given the user is on the sample project page
-    When the user clicks "Validate" button for section 1
+    When the user clicks "Submit" button for film review
     Then the following errors should appear:
-      | Error Message          |
-      | Please choose a film   |
-      | Text field is required |
-      | You must check the box |
+      | Error Message            |
+      | Please choose a film     |
+      | Review field is required |
+      | You must check the box   |
     And the film field should remain empty
     And the text field should remain empty
-    And checkbox text should remain "Unchecked"
+    And checkbox text should remain "Terms and Conditions (not accepted)"
 
-  Scenario: Section 1 Validate with only film selected
+  Scenario: Film Review Validate with only film selected
     Given the user is on the sample project page
-    When the user clicks on Choose Film dropdown in Section 1
+    When the user clicks on Choose Film dropdown in Film Review
     Then the following options should be visible:
       | Option                   |
       | The Shawshank Redemption |
@@ -98,50 +98,50 @@ Feature: Sample project automation Section 1 Scenarios
       | Schindler's List         |
     When the user selects "The Godfather" from the dropdown
     Then the film field should display "The Godfather"
-    When the user clicks "Validate" button for section 1
+    When the user clicks "Submit" button for film review
     Then the following errors should appear:
-      | Error Message          |
-      | Text field is required |
-      | You must check the box |
-    And checkbox text should remain "Unchecked"
+      | Error Message             |
+      | Review field is required  |
+      | You must check the box    |
+    And checkbox text should remain "Terms and Conditions (not accepted)"
 
-  Scenario: Section 1 Validate with Film + text entered, checkbox unchecked
+  Scenario: Film Review Validate with Film + text entered, checkbox unchecked
     Given the user is on the sample project page
     When the user selects "The Shawshank Redemption" from the film dropdown
     Then the film field should display "The Shawshank Redemption"
-    When the user enters "Test Section 1" in the text field
-    Then checkbox text should display "Unchecked"
-    When the user clicks "Validate" button for section 1
+    When the user enters "Test Film Review" in the text field
+    Then checkbox text should display "Terms and Conditions (not accepted)"
+    When the user clicks "Submit" button for film review
     Then the following error should appear:
       | Error Message          |
       | You must check the box |
 
-  Scenario: Section 1 Validate with Text + checkbox set, but no film selected
+  Scenario: Film Review Validate with Text + checkbox set, but no film selected
     Given the user is on the sample project page
-    When the user enters "Test Section 1" in the text field
+    When the user enters "Test Film Review" in the text field
     And the user checks the checkbox
-    Then checkbox text should display "Checked"
-    When the user clicks "Validate" button for section 1
+    Then checkbox text should display "Terms and Conditions (accepted)"
+    When the user clicks "Submit" button for film review
     Then the following error should appear:
       | Error Message        |
       | Please choose a film |
 
-  Scenario: Section 1 Validate with Film selected + checkbox checked, but empty text field
+  Scenario: Film Review Validate with Film selected + checkbox checked, but empty text field
     Given the user is on the sample project page
-    When the user clicks on Choose Film dropdown in Section 1
+    When the user clicks on Choose Film dropdown in Film Review
     And the user selects "The Dark Knight" from the dropdown
     Then the film field should display "The Dark Knight"
     When the user leaves the text field empty
     And the user checks the checkbox
-    Then checkbox text should display "Checked"
-    When the user clicks "Validate" button for section 1
+    Then checkbox text should display "Terms and Conditions (accepted)"
+    When the user clicks "Submit" button for film review
     Then the following error should appear:
-      | Error Message          |
-      | Text field is required |
+      | Error Message            |
+      | Review field is required |
 
-  Scenario: Section 1 Validate with using characters in text section field
+  Scenario: Film Review Validate with using characters in text field
     Given the user selects is on sample project page
-    When user clicks on Choose Film dropdown in Section 1
+    When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
       | The Shawshank Redemption |
@@ -151,11 +151,11 @@ Feature: Sample project automation Section 1 Scenarios
       | Schindler's List         |
     When the user selects "The Dark" from the dropdown
     Then the user should see "The Dark Knight" selected in the field
-    When the user clicks "Text for selection" field
-    And the user enters "Test Section ++"
-    Then user should see checkbox text as "Unchecked"
+    When the user clicks "Write your review" field
+    And the user enters "Test Film Review ++"
+    Then user should see checkbox text as "Terms and Conditions (not accepted)"
     When the user checks the checkbox
     Then the checkbox should be checked
-    And checkbox text should change to "Checked"
-    When the user clicks "Validate" button for section 1
+    And checkbox text should change to "Terms and Conditions (accepted)"
+    When the user clicks "Submit" button for film review
     Then error msg should appear "Text contains invalid characters (only letters, numbers and spaces allowed)"

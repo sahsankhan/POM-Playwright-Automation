@@ -3,11 +3,11 @@
  * Export all page objects from a single file for easy imports
  */
 
-const Section1Page = require('./Section1Page');
-const Section2Page = require('./Section2Page');
+const FilmReviewPage = require('./FilmReviewPage');
+const SeasonReviewPage = require('./SeasonReviewPage');
 
 module.exports = {
-  Section1Page,
-  Section2Page
+  FilmReviewPage,
+  SeasonReviewPage
 };
 

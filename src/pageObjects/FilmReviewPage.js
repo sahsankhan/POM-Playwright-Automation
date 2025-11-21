@@ -1,22 +1,23 @@
 /**
- * Section 1 Page Object
- * Contains all elements and methods for Section 1 validation
+ * Film Review Page Object
+ * Contains all elements and methods for Film Review validation
  */
-class Section1Page {
+class FilmReviewPage {
   constructor(page) {
     this.page = page;
+    this.baseUrl = process.env.BASE_URL;
     
-    // Base locators
-    this.pageTitle = '//h1[normalize-space(.)="Validation Demo — Two Sections"]';
-    this.filmDropdownInput = "//div[@data-testid='s1-film-input']//input";
-    this.filmOptions = "//li[@role='option']";
+    // Base locators - Updated with dynamic locators
+    this.pageTitle = 'h1.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom';
+    this.filmDropdownInput = 'div.MuiAutocomplete-inputRoot';
+    this.filmOptions = "li[role='option']";
     this.noOptionsItem = "//div[contains(@class,'MuiAutocomplete-noOptions') and normalize-space()='No options']";
-    this.textField = "//label[normalize-space()='Text for section 1']/following::input[1]";
-    this.checkbox = "//span[@data-testid='s1-checkbox']/input[@type='checkbox']";
-    this.checkboxTextLocator = "//span[@data-testid='s1-checkbox']/parent::label//span[contains(@class,'FormControlLabel-label')]";
-    this.clearFilmButton = "//button[@title='Clear']";
-    this.validateBtn = "//button[@data-testid='s1-validate-btn']";
-    this.resetBtn = "//button[@data-testid='s1-reset-btn']";
+    this.textField = 'Write your review';
+    this.checkbox = "[data-testid='s1-checkbox']";
+    this.checkboxTextLocator = 'span.MuiFormControlLabel-label';
+    this.clearFilmButton = 'Clear';
+    this.validateBtn = "[data-testid='s1-validate-btn']";
+    this.resetBtn = "[data-testid='s1-reset-btn']";
     this.banner = "[data-testid='s1-success-alert'] .MuiAlert-message";
     this.errorAlertMessage = "[data-testid='s1-error-alert'] .MuiAlert-message";
     this.infoAlertMessage = "[data-testid='s1-error-alert'] .MuiAlert-message";
@@ -26,17 +27,18 @@ class Section1Page {
    * Navigate to sample project page
    */
   async goto() {
-    await this.page.goto('https://sample-project-dusky.vercel.app/');
-    await this.page.waitForSelector(this.pageTitle, { timeout: 30000 });
+    await this.page.goto(this.baseUrl);
+    await this.page.locator(this.pageTitle, { hasText: "Mainteny — QA Demo" }).waitFor({ timeout: 30000 });
   }
 
   /**
    * Click on film dropdown
    */
   async clickFilmDropdown() {
-    await this.page.waitForSelector(this.filmDropdownInput, { state: 'visible', timeout: 5000 });
-    await this.page.click(this.filmDropdownInput);
-    await this.page.waitForSelector(this.filmOptions, { state: 'visible', timeout: 5000 });
+    const dropdown = this.page.locator(this.filmDropdownInput, { hasText: "Choose a film" }).locator('input');
+    await dropdown.waitFor({ state: 'visible', timeout: 5000 });
+    await dropdown.click();
+    await this.page.locator(this.filmOptions).first().waitFor({ state: 'visible', timeout: 5000 });
   }
 
   /**
@@ -44,12 +46,13 @@ class Section1Page {
    * @param {string} query - Search query
    */
   async typeFilmSearch(query) {
-    await this.page.waitForSelector(this.filmDropdownInput, { state: 'visible', timeout: 5000 });
-    await this.page.fill(this.filmDropdownInput, query);
+    const dropdown = this.page.locator(this.filmDropdownInput, { hasText: "Choose a film" }).locator('input');
+    await dropdown.waitFor({ state: 'visible', timeout: 5000 });
+    await dropdown.fill(query);
     // Wait for either options or "No options" to appear
     await Promise.race([
-      this.page.waitForSelector(this.filmOptions, { timeout: 5000 }),
-      this.page.waitForSelector(this.noOptionsItem, { timeout: 5000 })
+      this.page.locator(this.filmOptions).first().waitFor({ timeout: 5000 }),
+      this.page.locator(this.noOptionsItem).waitFor({ timeout: 5000 })
     ]);
   }
 
@@ -61,12 +64,12 @@ class Section1Page {
     try {
       // Wait for either options or no options message
       await Promise.race([
-        this.page.waitForSelector(this.filmOptions, { timeout: 2000 }),
-        this.page.waitForSelector(this.noOptionsItem, { timeout: 2000 })
+        this.page.locator(this.filmOptions).first().waitFor({ timeout: 2000 }),
+        this.page.locator(this.noOptionsItem).waitFor({ timeout: 2000 })
       ]).catch(() => {});
 
       // Check if "No options" is visible
-      const noOptionsVisible = await this.page.isVisible(this.noOptionsItem);
+      const noOptionsVisible = await this.page.locator(this.noOptionsItem).isVisible();
       if (noOptionsVisible) {
         return ['No options'];
       }
@@ -84,9 +87,9 @@ class Section1Page {
    * @param {string} filmPartial - Partial film name
    */
   async selectFilm(filmPartial) {
-    const optionSelector = `//li[@role='option' and contains(normalize-space(), "${filmPartial}")]`;
-    await this.page.waitForSelector(optionSelector, { state: 'visible', timeout: 5000 });
-    await this.page.click(optionSelector);
+    const optionSelector = `li[role='option']:has-text("${filmPartial}")`;
+    await this.page.locator(optionSelector).first().waitFor({ state: 'visible', timeout: 5000 });
+    await this.page.locator(optionSelector).first().click();
     // Wait for the value to be set
     await this.page.waitForTimeout(300);
   }
@@ -96,7 +99,8 @@ class Section1Page {
    * @returns {Promise<string>} Selected film value
    */
   async getSelectedFilm() {
-    return await this.page.inputValue(this.filmDropdownInput);
+    const dropdown = this.page.locator(this.filmDropdownInput, { hasText: "Choose a film" }).locator('input');
+    return await dropdown.inputValue();
   }
 
   /**
@@ -104,8 +108,9 @@ class Section1Page {
    * @param {string} value - Text to enter
    */
   async enterText(value) {
-    await this.page.waitForSelector(this.textField, { state: 'visible', timeout: 5000 });
-    await this.page.fill(this.textField, value);
+    const textField = this.page.getByLabel(this.textField).first();
+    await textField.waitFor({ state: 'visible', timeout: 5000 });
+    await textField.fill(value);
   }
 
   /**
@@ -113,7 +118,8 @@ class Section1Page {
    * @returns {Promise<string>} Text field value
    */
   async getTextFieldValue() {
-    return await this.page.inputValue(this.textField);
+    const textField = this.page.getByLabel(this.textField).first();
+    return await textField.inputValue();
   }
 
   /**
@@ -121,7 +127,8 @@ class Section1Page {
    * @returns {Promise<string>} Checkbox text
    */
   async getCheckboxText() {
-    const text = await this.page.textContent(this.checkboxTextLocator);
+    const checkboxLabel = this.page.locator(this.checkbox).locator('..').locator(this.checkboxTextLocator);
+    const text = await checkboxLabel.textContent();
     return text ? text.trim() : '';
   }
 
@@ -129,8 +136,9 @@ class Section1Page {
    * Check the checkbox
    */
   async checkCheckbox() {
-    await this.page.waitForSelector(this.checkbox, { state: 'visible', timeout: 5000 });
-    await this.page.check(this.checkbox);
+    const checkbox = this.page.locator(this.checkbox).locator('input');
+    await checkbox.waitFor({ state: 'visible', timeout: 5000 });
+    await checkbox.check();
     // Wait for checkbox state to update
     await this.page.waitForTimeout(300);
   }
@@ -140,11 +148,12 @@ class Section1Page {
    * @param {string} state - "Checked" or "Unchecked"
    */
   async setCheckboxState(state) {
+    const checkbox = this.page.locator(this.checkbox).locator('input');
     const normalized = state.toLowerCase();
     if (normalized === 'checked') {
-      await this.page.check(this.checkbox);
+      await checkbox.check();
     } else {
-      await this.page.uncheck(this.checkbox);
+      await checkbox.uncheck();
     }
   }
 
@@ -153,19 +162,21 @@ class Section1Page {
    * @returns {Promise<boolean>} True if checked
    */
   async isCheckboxChecked() {
-    return await this.page.isChecked(this.checkbox);
+    const checkbox = this.page.locator(this.checkbox).locator('input');
+    return await checkbox.isChecked();
   }
 
   /**
    * Click validate button
    */
   async clickValidate() {
-    await this.page.waitForSelector(this.validateBtn, { state: 'visible', timeout: 5000 });
-    await this.page.click(this.validateBtn);
+    const validateBtn = this.page.locator(this.validateBtn);
+    await validateBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await validateBtn.click();
     // Wait for validation result (banner or error)
     await Promise.race([
-      this.page.waitForSelector(this.banner, { timeout: 5000 }),
-      this.page.waitForSelector(this.errorAlertMessage, { timeout: 5000 })
+      this.page.locator(this.banner).waitFor({ timeout: 5000 }),
+      this.page.locator(this.errorAlertMessage).waitFor({ timeout: 5000 })
     ]);
   }
 
@@ -173,8 +184,9 @@ class Section1Page {
    * Click reset button
    */
   async clickReset() {
-    await this.page.waitForSelector(this.resetBtn, { state: 'visible', timeout: 5000 });
-    await this.page.click(this.resetBtn);
+    const resetBtn = this.page.locator(this.resetBtn);
+    await resetBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await resetBtn.click();
     // Wait for fields to be cleared
     await this.page.waitForTimeout(500);
   }
@@ -183,8 +195,9 @@ class Section1Page {
    * Click clear film button
    */
   async clickClearFilm() {
-    await this.page.waitForSelector(this.clearFilmButton, { state: 'visible', timeout: 5000 });
-    await this.page.click(this.clearFilmButton);
+    const clearBtn = this.page.getByTitle(this.clearFilmButton);
+    await clearBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await clearBtn.click();
     // Wait for field to be cleared
     await this.page.waitForTimeout(300);
   }
@@ -195,9 +208,26 @@ class Section1Page {
    */
   async getBannerText() {
     try {
-      await this.page.waitForSelector(this.banner, { timeout: 5000 });
-      const text = await this.page.textContent(this.banner);
-      return text ? text.trim() : null;
+      // Try multiple possible banner selectors
+      const bannerSelectors = [
+        this.banner,
+        "[data-testid='s1-success-alert']",
+        ".MuiAlert-standardSuccess",
+        "div[role='alert']"
+      ];
+      
+      for (const selector of bannerSelectors) {
+        try {
+          await this.page.locator(selector).waitFor({ timeout: 2000 });
+          const text = await this.page.locator(selector).textContent();
+          if (text && text.trim()) {
+            return text.trim();
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+      return null;
     } catch (error) {
       return null;
     }
@@ -209,10 +239,10 @@ class Section1Page {
    */
   async getErrorAlertText() {
     try {
-      const isVisible = await this.page.isVisible(this.errorAlertMessage);
+      const isVisible = await this.page.locator(this.errorAlertMessage).isVisible();
       if (!isVisible) return null;
       
-      const text = await this.page.textContent(this.errorAlertMessage);
+      const text = await this.page.locator(this.errorAlertMessage).textContent();
       return text ? text.trim() : null;
     } catch (error) {
       return null;
@@ -225,10 +255,10 @@ class Section1Page {
    */
   async getInfoAlertText() {
     try {
-      const isVisible = await this.page.isVisible(this.infoAlertMessage);
+      const isVisible = await this.page.locator(this.infoAlertMessage).isVisible();
       if (!isVisible) return null;
       
-      const text = await this.page.textContent(this.infoAlertMessage);
+      const text = await this.page.locator(this.infoAlertMessage).textContent();
       return text ? text.trim() : null;
     } catch (error) {
       return null;
@@ -237,12 +267,13 @@ class Section1Page {
 
   /**
    * Dynamic button click based on button name
-   * @param {string} buttonName - Button name (e.g., "Validate", "Reset", "Clear")
+   * @param {string} buttonName - Button name (e.g., "Validate", "Submit", "Reset", "Clear")
    */
   async clickButtonByName(buttonName) {
     const normalized = buttonName.toLowerCase();
     switch (normalized) {
       case 'validate':
+      case 'submit':
         await this.clickValidate();
         break;
       case 'reset':
@@ -262,8 +293,9 @@ class Section1Page {
    */
   async clickFieldByName(fieldName) {
     const normalized = fieldName.toLowerCase();
-    if (normalized.includes('text')) {
-      await this.page.click(this.textField);
+    if (normalized.includes('text') || normalized.includes('review')) {
+      const textField = this.page.getByLabel(this.textField).first();
+      await textField.click();
     } else if (normalized.includes('film')) {
       await this.clickFilmDropdown();
     } else {
@@ -282,7 +314,7 @@ class Section1Page {
     if (normalized.includes('film')) {
       const value = await this.getSelectedFilm();
       return value === '' || value === null;
-    } else if (normalized.includes('text')) {
+    } else if (normalized.includes('text') || normalized.includes('review')) {
       const value = await this.getTextFieldValue();
       return value === '' || value === null;
     } else if (normalized.includes('checkbox')) {
@@ -299,7 +331,7 @@ class Section1Page {
    */
   async getAllErrorMessages() {
     try {
-      await this.page.waitForSelector(this.errorAlertMessage, { timeout: 5000 });
+      await this.page.locator(this.errorAlertMessage).waitFor({ timeout: 5000 });
       const errorText = await this.getErrorAlertText();
       
       if (!errorText) return [];
@@ -358,5 +390,4 @@ class Section1Page {
   }
 }
 
-module.exports = Section1Page;
-
+module.exports = FilmReviewPage;

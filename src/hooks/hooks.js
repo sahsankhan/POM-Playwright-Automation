@@ -1,7 +1,7 @@
 const { Before, After, BeforeAll, AfterAll, Status, setDefaultTimeout } = require('@cucumber/cucumber');
 const { chromium, firefox, webkit } = require('@playwright/test');
-const Section1Page = require('../pageObjects/Section1Page');
-const Section2Page = require('../pageObjects/Section2Page');
+const FilmReviewPage = require('../pageObjects/FilmReviewPage');
+const SeasonReviewPage = require('../pageObjects/SeasonReviewPage');
 require('dotenv').config();
 
 // Set default timeout for steps
@@ -29,6 +29,8 @@ Before(async function (scenario) {
   // Get browser type from environment or world parameters
   const browserType = this.parameters?.browser || process.env.BROWSER || 'chromium';
   const headless = process.env.HEADLESS !== 'false';
+  
+  console.log(`🌐 Browser: ${browserType} | Headless: ${headless} | HEADLESS env: "${process.env.HEADLESS}"`);
   
   // Launch browser
   switch (browserType.toLowerCase()) {
@@ -58,8 +60,8 @@ Before(async function (scenario) {
   this.page = await context.newPage();
   
   // Initialize page objects
-  this.section1Page = new Section1Page(this.page);
-  this.section2Page = new Section2Page(this.page);
+  this.filmReviewPage = new FilmReviewPage(this.page);
+  this.seasonReviewPage = new SeasonReviewPage(this.page);
   
   // Set context timeout
   context.setDefaultTimeout(parseInt(process.env.TIMEOUT) || 60000);

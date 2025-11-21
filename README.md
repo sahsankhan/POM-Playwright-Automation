@@ -41,4 +41,5 @@ VIEWPORT_HEIGHT=720
     cucumber-js.
 7.  Run specific tests by name using npx cucumber-js –name “”.
 8.  Generate HTML reports using npm run report.
-9.  View test reports in the reports directory.
+9.  Open Report: start reports/html-report/index.html
+

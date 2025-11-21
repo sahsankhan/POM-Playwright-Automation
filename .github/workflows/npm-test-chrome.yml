@@ -35,6 +35,10 @@ jobs:
         CI: true
         HEADLESS: true
         BROWSER: chromium
+        BASE_URL: https://sample-project-dusky.vercel.app/
+        VIEWPORT_WIDTH: 1280
+        VIEWPORT_HEIGHT: 720
+        TIMEOUT: 60000
         
     - name: Upload test reports
       uses: actions/upload-artifact@v4

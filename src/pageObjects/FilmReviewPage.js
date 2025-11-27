@@ -32,7 +32,7 @@ class FilmReviewPage {
    */
   async goto() {
     await this.page.goto(this.baseUrl);
-    await this.page.locator(this.pageTitle, { hasText: CommonLocators.pageTitleText }).waitFor({ timeout: 30000 });
+    await this.page.locator(this.pageTitle, { hasText: CommonLocators.pageTitleText }).waitFor({ timeout: 3000 });
   }
 
   /**
@@ -40,9 +40,9 @@ class FilmReviewPage {
    */
   async clickFilmDropdown() {
     const dropdown = this.page.locator(this.filmDropdownInput, { hasText: "Choose a film" }).locator('input');
-    await dropdown.waitFor({ state: 'visible', timeout: 5000 });
+    await dropdown.waitFor({ state: 'visible', timeout: 3000 });
     await dropdown.click();
-    await this.page.locator(this.filmOptions).first().waitFor({ state: 'visible', timeout: 5000 });
+    await this.page.locator(this.filmOptions).first().waitFor({ state: 'visible', timeout: 3000 });
   }
 
   /**
@@ -51,12 +51,12 @@ class FilmReviewPage {
    */
   async typeFilmSearch(query) {
     const dropdown = this.page.locator(this.filmDropdownInput, { hasText: "Choose a film" }).locator('input');
-    await dropdown.waitFor({ state: 'visible', timeout: 5000 });
+    await dropdown.waitFor({ state: 'visible', timeout: 3000 });
     await dropdown.fill(query);
     // Wait for either options or "No options" to appear
     await Promise.race([
-      this.page.locator(this.filmOptions).first().waitFor({ timeout: 5000 }),
-      this.page.locator(this.noOptionsItem).waitFor({ timeout: 5000 })
+      this.page.locator(this.filmOptions).first().waitFor({ timeout: 3000 }),
+      this.page.locator(this.noOptionsItem).waitFor({ timeout: 3000 })
     ]);
   }
 
@@ -68,8 +68,8 @@ class FilmReviewPage {
     try {
       // Wait for either options or no options message
       await Promise.race([
-        this.page.locator(this.filmOptions).first().waitFor({ timeout: 2000 }),
-        this.page.locator(this.noOptionsItem).waitFor({ timeout: 2000 })
+        this.page.locator(this.filmOptions).first().waitFor({ timeout: 3000 }),
+        this.page.locator(this.noOptionsItem).waitFor({ timeout: 3000 })
       ]).catch(() => {});
 
       // Check if "No options" is visible
@@ -92,10 +92,8 @@ class FilmReviewPage {
    */
   async selectFilm(filmPartial) {
     const optionSelector = `li[role='option']:has-text("${filmPartial}")`;
-    await this.page.locator(optionSelector).first().waitFor({ state: 'visible', timeout: 5000 });
+    await this.page.locator(optionSelector).first().waitFor({ state: 'visible', timeout: 3000 });
     await this.page.locator(optionSelector).first().click();
-    // Wait for the value to be set
-    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -113,7 +111,7 @@ class FilmReviewPage {
    */
   async enterText(value) {
     const textField = this.page.getByLabel(this.textField).first();
-    await textField.waitFor({ state: 'visible', timeout: 5000 });
+    await textField.waitFor({ state: 'visible', timeout: 3000 });
     await textField.fill(value);
   }
 
@@ -141,10 +139,8 @@ class FilmReviewPage {
    */
   async checkCheckbox() {
     const checkbox = this.page.locator(this.checkbox).locator('input');
-    await checkbox.waitFor({ state: 'visible', timeout: 5000 });
+    await checkbox.waitFor({ state: 'visible', timeout: 3000 });
     await checkbox.check();
-    // Wait for checkbox state to update
-    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -175,12 +171,12 @@ class FilmReviewPage {
    */
   async clickValidate() {
     const validateBtn = this.page.locator(this.validateBtn);
-    await validateBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await validateBtn.waitFor({ state: 'visible', timeout: 3000 });
     await validateBtn.click();
     // Wait for validation result (banner or error)
     await Promise.race([
-      this.page.locator(this.banner).waitFor({ timeout: 5000 }),
-      this.page.locator(this.errorAlertMessage).waitFor({ timeout: 5000 })
+      this.page.locator(this.banner).waitFor({ timeout: 3000 }),
+      this.page.locator(this.errorAlertMessage).waitFor({ timeout: 3000 })
     ]);
   }
 
@@ -189,10 +185,8 @@ class FilmReviewPage {
    */
   async clickReset() {
     const resetBtn = this.page.locator(this.resetBtn);
-    await resetBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await resetBtn.waitFor({ state: 'visible', timeout: 3000 });
     await resetBtn.click();
-    // Wait for fields to be cleared
-    await this.page.waitForTimeout(500);
   }
 
   /**
@@ -200,10 +194,8 @@ class FilmReviewPage {
    */
   async clickClearFilm() {
     const clearBtn = this.page.getByTitle(this.clearFilmButton);
-    await clearBtn.waitFor({ state: 'visible', timeout: 5000 });
+    await clearBtn.waitFor({ state: 'visible', timeout: 3000 });
     await clearBtn.click();
-    // Wait for field to be cleared
-    await this.page.waitForTimeout(300);
   }
 
   /**
@@ -222,7 +214,7 @@ class FilmReviewPage {
       
       for (const selector of bannerSelectors) {
         try {
-          await this.page.locator(selector).waitFor({ timeout: 2000 });
+          await this.page.locator(selector).waitFor({ timeout: 3000 });
           const text = await this.page.locator(selector).textContent();
           if (text && text.trim()) {
             return text.trim();
@@ -335,7 +327,7 @@ class FilmReviewPage {
    */
   async getAllErrorMessages() {
     try {
-      await this.page.locator(this.errorAlertMessage).waitFor({ timeout: 5000 });
+      await this.page.locator(this.errorAlertMessage).waitFor({ timeout: 3000 });
       const errorText = await this.getErrorAlertText();
       
       if (!errorText) return [];
@@ -370,7 +362,7 @@ class FilmReviewPage {
     try {
       const locator = this.getSpecificErrorLocator(errorText);
       const errorElement = this.page.locator(locator);
-      await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+      await errorElement.waitFor({ state: 'visible', timeout: 3000 });
       return await errorElement.isVisible();
     } catch (error) {
       return false;
@@ -386,7 +378,7 @@ class FilmReviewPage {
     try {
       const locator = this.getSpecificErrorLocator(errorText);
       const errorElement = this.page.locator(locator);
-      await errorElement.waitFor({ state: 'visible', timeout: 5000 });
+      await errorElement.waitFor({ state: 'visible', timeout: 3000 });
       return await errorElement.textContent();
     } catch (error) {
       return null;

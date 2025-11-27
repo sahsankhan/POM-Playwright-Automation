@@ -4,7 +4,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @smoke
   Scenario: Film Review passes validation
-    Given the user selects is on Mainteny — QA Demo page
+    Given the user is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
@@ -26,7 +26,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @smoke
   Scenario: Film Review resets validation
-    Given the user selects is on sample project page
+    Given the user is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
@@ -55,7 +55,7 @@ Feature: Sample project automation Film Review Scenarios
       | Checkbox             |
 
   Scenario: Verify clear button for choose a film field clears the field
-    Given the user selects is on sample project page
+    Given the user is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |
@@ -71,7 +71,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Verify No Options appear for invalid film name
-    Given the user selects is on sample project page
+    Given the user is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
     When the user enters "TEST123" in the Choose Film field
     Then following options should be visible:
@@ -79,7 +79,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with all fields blank
-    Given the user is on the sample project page
+    Given the user is on Mainteny — QA Demo page
     When the user clicks "Submit" button for film review
     Then the following errors should appear:
       | Error Message            |
@@ -92,7 +92,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with only film selected
-    Given the user is on the sample project page
+    Given the user is on Mainteny — QA Demo page
     When the user clicks on Choose Film dropdown in Film Review
     Then the following options should be visible:
       | Option                   |
@@ -112,7 +112,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with Film + text entered, checkbox unchecked
-    Given the user is on the sample project page
+    Given the user is on Mainteny — QA Demo page
     When the user selects "The Shawshank Redemption" from the film dropdown
     Then the film field should display "The Shawshank Redemption"
     When the user enters "Test Film Review" in the text field
@@ -124,7 +124,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with Text + checkbox set, but no film selected
-    Given the user is on the sample project page
+    Given the user is on Mainteny — QA Demo page
     When the user enters "Test Film Review" in the text field
     And the user checks the checkbox
     Then checkbox text should display "Terms and Conditions (accepted)"
@@ -135,7 +135,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with Film selected + checkbox checked, but empty text field
-    Given the user is on the sample project page
+    Given the user is on Mainteny — QA Demo page
     When the user clicks on Choose Film dropdown in Film Review
     And the user selects "The Dark Knight" from the dropdown
     Then the film field should display "The Dark Knight"
@@ -149,7 +149,7 @@ Feature: Sample project automation Film Review Scenarios
 
   @negative
   Scenario: Film Review Validate with using characters in text field
-    Given the user selects is on sample project page
+    Given the user is on Mainteny — QA Demo page
     When user clicks on Choose Film dropdown in Film Review
     Then following options should be visible:
       | Option                   |

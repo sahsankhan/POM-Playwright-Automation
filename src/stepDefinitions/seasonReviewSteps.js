@@ -13,26 +13,26 @@ const { expect } = require('@playwright/test');
 
 // Alias for dropdown click (Season Review context)
 When('the user clicks on Choose Film dropdown in Season Review', async function () {
-  await this.seasonReviewPage.clickFilmDropdown();
+  await this.seasonReviewPage.clickSeasonDropdown();
 });
 
 When('user clicks on Choose Film dropdown in Season Review', async function () {
-  await this.seasonReviewPage.clickFilmDropdown();
+  await this.seasonReviewPage.clickSeasonDropdown();
 });
 
-// Alias for film search (Season Review context)
+// Alias for season search (Season Review context)
 When('the user enters {string} in the Season Review film field', async function (searchText) {
-  await this.seasonReviewPage.typeFilmSearch(searchText);
+  await this.seasonReviewPage.typeSeasonSearch(searchText);
 });
 
-// Alias for film selection (Season Review context)
-When('the user selects {string} from the Season Review dropdown', async function (filmName) {
+// Alias for season selection (Season Review context)
+When('the user selects {string} from the Season Review dropdown', async function (seasonName) {
   // Check if dropdown is already open, if not click it
   const dropdownOpen = await this.page.isVisible("li[role='option']");
   if (!dropdownOpen) {
-    await this.seasonReviewPage.clickFilmDropdown();
+    await this.seasonReviewPage.clickSeasonDropdown();
   }
-  await this.seasonReviewPage.selectFilm(filmName);
+  await this.seasonReviewPage.selectSeason(seasonName);
 });
 
 // Alias for field clicks (Season Review context)
@@ -52,10 +52,6 @@ When('the user leaves the Season Review text field empty', async function () {
 // Alias for checkbox (Season Review context)
 When('the user checks the checkbox in Season Review', async function () {
   await this.seasonReviewPage.checkCheckbox();
-});
-
-When('the user sets checkbox to {string} in Season Review', async function (state) {
-  await this.seasonReviewPage.setCheckboxState(state);
 });
 
 // Alias for button clicks (Season Review context)
@@ -78,7 +74,7 @@ When('the user clicks Submit button for season review', async function () {
 // Alias for dropdown options (Season Review context)
 Then('the following options should be visible in Season Review:', async function (dataTable) {
   const expectedOptions = dataTable.raw().map(row => row[0].trim()).filter(opt => opt !== 'Option');
-  const actualOptions = await this.seasonReviewPage.getFilmOptions();
+  const actualOptions = await this.seasonReviewPage.getSeasonOptions();
   
   // Normalize options for comparison
   const normalizedActual = actualOptions.map(opt => opt.trim());
@@ -101,22 +97,22 @@ Then('the following options should be visible in Season Review:', async function
 
 // Alias for season field value (Season Review context)
 Then('the user should see {string} selected in Season Review field', async function (expectedValue) {
-  const actualValue = await this.seasonReviewPage.getSelectedFilm();
+  const actualValue = await this.seasonReviewPage.getSelectedSeason();
   expect(actualValue).toBe(expectedValue);
 });
 
 Then('the Season Review film field should display {string}', async function (expectedValue) {
-  const actualValue = await this.seasonReviewPage.getSelectedFilm();
+  const actualValue = await this.seasonReviewPage.getSelectedSeason();
   expect(actualValue).toBe(expectedValue);
 });
 
 Then('the Season Review film field should be empty', async function () {
-  const value = await this.seasonReviewPage.getSelectedFilm();
+  const value = await this.seasonReviewPage.getSelectedSeason();
   expect(value).toBe('');
 });
 
 Then('the Season Review film field should remain empty', async function () {
-  const value = await this.seasonReviewPage.getSelectedFilm();
+  const value = await this.seasonReviewPage.getSelectedSeason();
   expect(value).toBe('');
 });
 

@@ -33,19 +33,8 @@ function getPageObject(world, stepText = '') {
 // GIVEN STEPS - Navigation
 // ============================================================================
 
-Given('the user is on sample project page', async function () {
-  await this.filmReviewPage.goto();
-});
 
-Given('the user is on the sample project page', async function () {
-  await this.filmReviewPage.goto();
-});
-
-Given('the user selects is on sample project page', async function () {
-  await this.filmReviewPage.goto();
-});
-
-Given('the user selects is on Mainteny — QA Demo page', async function () {
+Given('the user is on Mainteny — QA Demo page', async function () {
   await this.filmReviewPage.goto();
 });
 
@@ -59,26 +48,46 @@ Given('the user is on the Mainteny — QA Demo page', async function () {
 
 When('the user clicks on Choose Film dropdown in {string}', async function (section) {
   const pageObject = getPageObject(this, section);
-  await pageObject.clickFilmDropdown();
+  if (pageObject === this.seasonReviewPage) {
+    await pageObject.clickSeasonDropdown();
+  } else {
+    await pageObject.clickFilmDropdown();
+  }
 });
 
 When('user clicks on Choose Film dropdown in {string}', async function (section) {
   const pageObject = getPageObject(this, section);
-  await pageObject.clickFilmDropdown();
+  if (pageObject === this.seasonReviewPage) {
+    await pageObject.clickSeasonDropdown();
+  } else {
+    await pageObject.clickFilmDropdown();
+  }
 });
 
 When('the user enters {string} in the {string} film field', async function (searchText, section) {
   const pageObject = getPageObject(this, section);
-  await pageObject.typeFilmSearch(searchText);
+  if (pageObject === this.seasonReviewPage) {
+    await pageObject.typeSeasonSearch(searchText);
+  } else {
+    await pageObject.typeFilmSearch(searchText);
+  }
 });
 
 When('the user selects {string} from the {string} dropdown', async function (filmName, section) {
   const pageObject = getPageObject(this, section);
   const dropdownOpen = await this.page.isVisible("li[role='option']");
   if (!dropdownOpen) {
-    await pageObject.clickFilmDropdown();
+    if (pageObject === this.seasonReviewPage) {
+      await pageObject.clickSeasonDropdown();
+    } else {
+      await pageObject.clickFilmDropdown();
+    }
   }
-  await pageObject.selectFilm(filmName);
+  if (pageObject === this.seasonReviewPage) {
+    await pageObject.selectSeason(filmName);
+  } else {
+    await pageObject.selectFilm(filmName);
+  }
 });
 
 
@@ -113,14 +122,6 @@ When('the user checks the checkbox in {string}', async function (section) {
   await pageObject.checkCheckbox();
 });
 
-When('the user sets checkbox to {string}', async function (state) {
-  await this.filmReviewPage.setCheckboxState(state);
-});
-
-When('the user sets checkbox to {string} in {string}', async function (state, section) {
-  const pageObject = getPageObject(this, section);
-  await pageObject.setCheckboxState(state);
-});
 
 // ============================================================================
 // WHEN STEPS - Button Clicks
@@ -151,7 +152,9 @@ When('the user clicks Submit button for season review', async function () {
 Then('the following options should be visible in {string}:', async function (section, dataTable) {
   const pageObject = getPageObject(this, section);
   const expectedOptions = dataTable.raw().map(row => row[0].trim()).filter(opt => opt !== 'Option');
-  const actualOptions = await pageObject.getFilmOptions();
+  const actualOptions = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSeasonOptions()
+    : await pageObject.getFilmOptions();
   
   // Normalize options for comparison
   const normalizedActual = actualOptions.map(opt => opt.trim());
@@ -175,7 +178,9 @@ Then('the following options should be visible in {string}:', async function (sec
 Then('following options should be visible:', async function (dataTable) {
   const pageObject = getPageObject(this);
   const expectedOptions = dataTable.raw().map(row => row[0].trim()).filter(opt => opt !== 'Option');
-  const actualOptions = await pageObject.getFilmOptions();
+  const actualOptions = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSeasonOptions()
+    : await pageObject.getFilmOptions();
   
   // Normalize options for comparison
   const normalizedActual = actualOptions.map(opt => opt.trim());
@@ -199,7 +204,9 @@ Then('following options should be visible:', async function (dataTable) {
 Then('the following options should be visible:', async function (dataTable) {
   const pageObject = getPageObject(this);
   const expectedOptions = dataTable.raw().map(row => row[0].trim()).filter(opt => opt !== 'Option');
-  const actualOptions = await pageObject.getFilmOptions();
+  const actualOptions = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSeasonOptions()
+    : await pageObject.getFilmOptions();
   
   // Normalize options for comparison
   const normalizedActual = actualOptions.map(opt => opt.trim());
@@ -226,37 +233,49 @@ Then('the following options should be visible:', async function (dataTable) {
 
 Then('the user should see {string} selected in the field', async function (expectedValue) {
   const pageObject = getPageObject(this);
-  const actualValue = await pageObject.getSelectedFilm();
+  const actualValue = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(actualValue).toBe(expectedValue);
 });
 
 Then('the user should see {string} selected in {string} field', async function (expectedValue, section) {
   const pageObject = getPageObject(this, section);
-  const actualValue = await pageObject.getSelectedFilm();
+  const actualValue = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(actualValue).toBe(expectedValue);
 });
 
 Then('the {string} film field should display {string}', async function (section, expectedValue) {
   const pageObject = getPageObject(this, section);
-  const actualValue = await pageObject.getSelectedFilm();
+  const actualValue = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(actualValue).toBe(expectedValue);
 });
 
 Then('the {string} film field should be empty', async function (section) {
   const pageObject = getPageObject(this, section);
-  const value = await pageObject.getSelectedFilm();
+  const value = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(value).toBe('');
 });
 
 Then('the {string} film field should remain empty', async function (section) {
   const pageObject = getPageObject(this, section);
-  const value = await pageObject.getSelectedFilm();
+  const value = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(value).toBe('');
 });
 
 Then('the user should see empty field', async function () {
   const pageObject = getPageObject(this);
-  const value = await pageObject.getSelectedFilm();
+  const value = pageObject === this.seasonReviewPage 
+    ? await pageObject.getSelectedSeason()
+    : await pageObject.getSelectedFilm();
   expect(value).toBe('');
 });
 

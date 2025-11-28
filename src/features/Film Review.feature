@@ -40,7 +40,7 @@ Feature: Sample project automation Film Review Scenarios
       | The Dark Knight          |
     When the user selects "The Dark" from the dropdown
     Then the user should see "The Dark Knight" selected in the field
-    When the user clicks "Text for Film Review" field
+    When the user clicks "Write your review" field
     And the user enters "Test Film Review"
     Then user should see checkbox text as "Terms and Conditions (not accepted)"
     When the user checks the checkbox
